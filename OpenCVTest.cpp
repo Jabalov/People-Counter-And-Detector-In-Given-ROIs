@@ -19,9 +19,9 @@ int main(int argc, char** argv)
 	int frame_width = frames[0].cols;
 	int frame_height = frames[0].rows;
 	cv::VideoWriter video("output1.avi", 
-						  cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 
-						  10, 
-						  cv::Size(frame_width, frame_height));
+			       cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 
+			       10, 
+	       		       cv::Size(frame_width, frame_height));
 
 	int i = 0;
 	while (i < frames.size())
