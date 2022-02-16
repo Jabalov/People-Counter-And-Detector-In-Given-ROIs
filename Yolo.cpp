@@ -25,10 +25,10 @@ void Yolo::getDetections(cv::Mat& frame)
 	std::fill(counters, counters + 3, 0);
 	cv::Mat blob;
 	cv::dnn::blobFromImage(frame, blob, 1 / 255.0, 
-						   cv::Size(this->inputWidth, 
-						   this->inputHeight), 
-						   cv::Scalar(0, 0, 0), 
-						   true, false);
+			       cv::Size(this->inputWidth, 
+			       this->inputHeight), 
+			       cv::Scalar(0, 0, 0), 
+			       true, false);
 
 	this->neuralNetwork.setInput(blob);
 	std::vector<cv::Mat> outputs;
@@ -46,23 +46,23 @@ void Yolo::getDetections(cv::Mat& frame)
 
 		std::string label = cv::format("Persons Counts in ROI%d: %d", i+1, this->counters[i]);
 		cv::putText(frame, 
-					label, 
-					cv::Point(this->rois[i].x, this->rois[i].y + 15), 
-					cv::FONT_HERSHEY_SIMPLEX, 
-					0.6, 
-					cv::Scalar(0, 0, 255), 
-					1.3);
+			label, 
+			cv::Point(this->rois[i].x, this->rois[i].y + 15), 
+			cv::FONT_HERSHEY_SIMPLEX, 
+			0.6, 
+			cv::Scalar(0, 0, 255), 
+			1.3);
 	}
 		
 }
 
 void Yolo::drawPrediction(int classId, 
-						  float conf, 
-						  int left, 
-						  int top, 
-						  int right, 
-						  int bottom, 
-						  cv::Mat& frame)
+			  float conf, 
+			  int left, 
+			  int top, 
+			  int right, 
+			  int bottom, 
+			  cv::Mat& frame)
 {
 	cv::rectangle(frame, cv::Point(left, top), cv::Point(right, bottom), cv::Scalar(0, 0, 255), 3);
 
@@ -77,14 +77,15 @@ void Yolo::drawPrediction(int classId,
 	cv::Size labelSize = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
 	top = std::max(top, labelSize.height);
 	putText(frame, 
-			label, 
-			cv::Point(left, top), 
-			cv::FONT_HERSHEY_SIMPLEX, 
-			0.75, cv::Scalar(0, 255, 0), 1);
+		label, 
+		cv::Point(left, top), 
+		cv::FONT_HERSHEY_SIMPLEX, 
+		0.75, 
+		cv::Scalar(0, 255, 0), 1);
 }
 
 void Yolo::postProcessing(cv::Mat& frame, 
-						 const std::vector<cv::Mat>& outputs)
+			  const std::vector<cv::Mat>& outputs)
 {
 	std::vector<int> classIds;
 	std::vector<float> confidences;
@@ -127,18 +128,19 @@ void Yolo::postProcessing(cv::Mat& frame,
 			for(int j = this->rois.size() - 1; j >= 0; j--)
 			{
 				cv::Rect current_roi = this->rois[j];
-
-				if((current_roi.x < box.x + box.width / 2 && current_roi.x + current_roi.width > box.x + box.width / 2)
-					&& (current_roi.y < box.y + box.height / 2 && current_roi.y + current_roi.height > box.y + box.height / 2))
+				bool condition1 = (current_roi.x < box.x + box.width / 2 && current_roi.x + current_roi.width > box.x + box.width / 2);
+				bool condition2 = (current_roi.y < box.y + box.height / 2 && current_roi.y + current_roi.height > box.y + box.height / 2); 
+				
+				if(condition1 && condition2)
 				{
 					this->counters[j]++;
 					this->drawPrediction(classIds[idx],
-										 confidences[idx],
-										 box.x, 
-										 box.y,
-										 box.x + box.width, 
-										 box.y + box.height, 
-										 frame);
+							confidences[idx],
+							box.x, 
+							box.y,
+							box.x + box.width, 
+							box.y + box.height, 
+							frame);
 					break;
 				}
 			}
