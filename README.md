@@ -1,7 +1,7 @@
 # People-Counter-In-ROIs
 
 ### Output Sample:
-[(https://github.com/Jabalov/People-Counter-And-Detection-In-Given-ROIs/blob/main/output1.avi)]
+https://user-images.githubusercontent.com/83673888/155828087-26896d8a-3735-47d1-bdbe-a1060b076646.mp4
 
 
 ## Overview:
